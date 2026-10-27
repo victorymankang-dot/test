@@ -1,0 +1,13 @@
+<!doctype html><title>Breakout</title><body style="margin:0;background:#111;display:grid;place-items:center;height:100vh"><canvas id=c width=480 height=360></canvas><script>
+const c=document.getElementById('c'),x=c.getContext('2d'),W=480,H=360,R=8,C=10;let p,b,k,s,l,keys={};
+function init(){p=W/2;b={x:W/2,y:300,dx:3,dy:-3};k=[];for(let r=0;r<5;r++)for(let i=0;i<C;i++)k.push({x:i*48+2,y:r*18+30,r});s=0;l=3}
+onkeydown=e=>keys[e.key]=1;onkeyup=e=>keys[e.key]=0;c.onmousemove=e=>p=e.offsetX;
+function f(){x.fillStyle='#111';x.fillRect(0,0,W,H);
+if(keys.ArrowLeft)p-=6;if(keys.ArrowRight)p+=6;p=Math.max(40,Math.min(W-40,p));
+b.x+=b.dx;b.y+=b.dy;if(b.x<R||b.x>W-R)b.dx*=-1;if(b.y<R)b.dy*=-1;
+if(b.y>330-R&&b.y<340&&Math.abs(b.x-p)<45){b.dy=-Math.abs(b.dy);b.dx=(b.x-p)/8}
+if(b.y>H){if(--l<1){alert('Game Over: '+s);init()}else b={x:p,y:300,dx:3,dy:-3}}
+k=k.filter(o=>{if(b.x>o.x&&b.x<o.x+44&&b.y>o.y-R&&b.y<o.y+14+R){b.dy*=-1;s+=10;return 0}x.fillStyle=`hsl(${o.r*50},70%,55%)`;x.fillRect(o.x,o.y,44,14);return 1});
+if(!k.length){alert('Win! '+s);init()}
+x.fillStyle='#fff';x.fillRect(p-40,330,80,8);x.beginPath();x.arc(b.x,b.y,R,0,7);x.fill();x.fillText(`Score ${s}  Lives ${l}`,8,16);requestAnimationFrame(f)}
+init();f()</script>
